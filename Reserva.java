@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 public class Reserva {
     private String finalidade;
@@ -46,19 +45,3 @@ public class Reserva {
     }
     
 }
-=======
-package Agenda.Java;
-
-public class Reserva {
-    private String finalidade;
-
-    public String getFinalidade() {
-        return finalidade;
-    }
-
-    public void setFinalidade(String finalidade) {
-        this.finalidade = finalidade;
-    }
-    
-}
->>>>>>> da00b5c971063b806408fe25d14c8f80581f9253
