@@ -7,69 +7,156 @@ public class AppAgendaRecurso {
         Scanner ler = new Scanner(System.in);
         int aux = 0; // verifica o fim do programa
 
+        //login
+        String login, senha;
+
         while(aux != 1) {
-            autenticarAdmin(admin, ler);
-        }
-    }
-
-    public static void autenticarAdmin(Administrador admin, Scanner ler) {
-        System.out.print("Login: ");
-        String verifica_login = ler.nextLine();
-        System.out.print("Senha: ");
-        String verifica_senha = ler.nextLine();
-
-        if(verifica_login.equals(admin.getLogin()) && verifica_senha.equals(admin.getSenha())) {
-            System.out.println("Bem vindo admin!");
-            menuAdmin(admin,ler);
-        }else {
-            System.out.println("Login e senha incorretos");
+            System.out.print("Login: ");
+            login = ler.nextLine();
+            ler = new Scanner(System.in);
+            System.out.print("Senha: ");
+            senha = ler.nextLine();
+            ler = new Scanner(System.in);
+            if(admin.autenticarAdmin(login,senha)) {
+                System.out.println("Bem vindo admin! Essas são suas funcionalidades:");
+                menuAdmin(admin,ler);
+            } else {
+                System.out.println("Login e senha incorretos");
+            }
         }
     }
 
     public static void menuAdmin(Administrador admin, Scanner ler) {
-        System.out.println("\nO que voce deseja fazer?");
+        System.out.println("\n\nO que voce deseja fazer?");
         System.out.println("Cadastrar gerente[1]");
         System.out.println("Excluir gerente[2]");
         System.out.println("Imprimir gerentes[3]");
         System.out.println("Sair da conta[4]");
+        System.out.print("Sair da aplicação[5]\nR: ");
         
         int res;
         while(true) {
             res = ler.nextInt();
-
+            ler = new Scanner(System.in);
             switch(res) {
-                case 1: cadastraGerente(admin,ler);
+                case 1: 
+                    admin.cadastraGerente(ler);
+                    menuAdmin(admin, ler);
                 break;
 
-                //case 2: excluiGerente(ler);
-                //break;
+                case 2:
+                    System.out.println("\nDigite o login do gerente que deseja excluir: ");
+                    String loginGerente = ler.nextLine();
+                    admin.excluiGerente(loginGerente);
+                    menuAdmin(admin, ler);
+                break;
 
                 case 3: admin.listarGerentes(); menuAdmin(admin, ler);
                 break;
 
-                case 4: autenticarAdmin(admin, ler); 
+                case 4:
+                    int aux2=0;
+                    while(aux2==0) {
+                        //leitura do login e senha
+                        System.out.print("\nLogin: ");
+                        String login = ler.nextLine();
+                        ler = new Scanner(System.in);
+                        System.out.print("Senha: ");
+                        String senha = ler.nextLine();
+                        ler = new Scanner(System.in);
+
+                        if(admin.autenticarAdmin(login,senha)) {
+                            System.out.println("Bem vindo admin!");
+                            menuAdmin(admin,ler);
+                            aux2=1;
+                        } else {
+                            Gerente gerente = Gerente.autenticarGerente(admin, login, senha);
+                            if (gerente != null) {
+                                System.out.println("Bem vindo Gerente!");
+                                menuGerente(admin,gerente,ler);
+                                aux2=1;
+                            } else {
+                                System.out.println("\nLogin e senha incorretos");
+                            }
+                        }
+                    } 
+
+                case 5: System.exit(0);
                 break;
 
-                default: System.out.println("\nEscolha uma opção válida.\n");
+                default: 
+                    System.out.println("\nEscolha uma opção válida.\n"); 
+                    menuAdmin(admin, ler);
                 break;
             }
         }
     }
 
-    public static void cadastraGerente(Administrador admin, Scanner ler) {
-        String login_gerente, senha_gerente;
+    public static void menuGerente(Administrador admin, Gerente gerente, Scanner ler) {
+        System.out.println("\n\nO que voce deseja fazer?");
+        System.out.println("Cadastrar usuário[1]");
+        System.out.println("Excluir usuário[2]");
+        System.out.println("Imprimir usuários[3]");
+        System.out.println("Sair da conta[4]");
+        System.out.print("Sair da aplicação[5]\nR: ");
+        
+        int res;
+        while(true) {
+            res = ler.nextInt();
+            ler = new Scanner(System.in);
+            switch(res) {
+                case 1: 
+                    gerente.cadastraUsuario(ler);
+                    menuGerente(admin,gerente, ler);
+                break;
 
-        System.out.println("\nLogin gerente: ");
-        login_gerente = ler.nextLine();
-        ler.nextLine(); //consumir a nova linha restante
-        System.out.println("Senha gerente: ");
-        senha_gerente = ler.nextLine();
+                case 2:
+                    System.out.println("\nDigite o login do usuário que deseja excluir: ");
+                    String loginUsuario = ler.nextLine();
+                    gerente.excluiUsuario(loginUsuario);
+                    menuGerente(admin,gerente, ler);
+                break;
 
-        Gerente novoGerente = new Gerente(login_gerente, senha_gerente);
-        admin.setGerente(novoGerente);
+                case 3: 
+                    gerente.listarUsuarios();
+                    menuGerente(admin,gerente, ler);
+                break;
 
-        System.out.println("Cadastrado com sucesso.\n");
+                case 4:
+                    boolean loginSucesso = false;
+                    while (!loginSucesso) {
+                        // leitura do login e senha
+                        System.out.print("\nLogin: ");
+                        String login = ler.nextLine();
+                        System.out.print("Senha: ");
+                        String senha = ler.nextLine();
 
-        menuAdmin(admin, ler);
+                        if (admin.autenticarAdmin(login, senha)) {
+                            System.out.println("Bem vindo admin!");
+                            menuAdmin(admin, ler);
+                            loginSucesso = true;
+                        } else {
+                            Gerente gerente2 = gerente.autenticarGerente(admin,login, senha);
+                            if (gerente2 != null) {
+                                System.out.println("Bem vindo Gerente!");
+                                menuGerente(admin,gerente, ler);
+                                loginSucesso = true;
+                            } else {
+                                System.out.println("\nLogin e senha incorretos");
+                            }
+                        }
+                    }
+                break;
+
+
+                case 5: System.exit(0);
+                break;
+
+                default: 
+                    System.out.println("\nEscolha uma opção válida.\n"); 
+                    menuGerente(admin,gerente, ler);
+                break;
+            }
+        }
     }
 }
