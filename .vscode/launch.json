@@ -1,0 +1,91 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "AppAgendaRecurso",
+            "request": "launch",
+            "mainClass": "AppAgendaRecurso",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "Teste",
+            "request": "launch",
+            "mainClass": "Teste",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JCalendar",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JCalendar",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JDateChooser",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JDateChooser",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JDayChooser",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JDayChooser",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JMonthChooser",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JMonthChooser",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JTextFieldDateEditor",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JTextFieldDateEditor",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JYearChooser",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.JYearChooser",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JCalendarDemo",
+            "request": "launch",
+            "mainClass": "src.com.toedter.calendar.demo.JCalendarDemo",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JLocaleChooser",
+            "request": "launch",
+            "mainClass": "src.com.toedter.components.JLocaleChooser",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        },
+        {
+            "type": "java",
+            "name": "JSpinField",
+            "request": "launch",
+            "mainClass": "src.com.toedter.components.JSpinField",
+            "projectName": "Agenda_de_Recurso_23190fa6"
+        }
+    ]
+}

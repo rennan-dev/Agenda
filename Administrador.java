@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Administrador extends Usuario{
     
@@ -8,6 +7,10 @@ public class Administrador extends Usuario{
     public Administrador() {
         super("admin", "12345");
         this.gerentes = new ArrayList<>();
+    }
+
+    public void testeAdicionaGerente(Gerente gerente) {
+        this.gerentes.add(gerente);
     }
 
     public ArrayList<Gerente> getGerentes() {
@@ -30,32 +33,45 @@ public class Administrador extends Usuario{
         return login.equals(this.getLogin()) && senha.equals(this.getSenha());
     }
 
-    public void cadastraGerente(Scanner ler) {
-        String login_gerente, senha_gerente;
+    public boolean cadastraGerente(String login_gerente, String senha_gerente) {
 
-        System.out.println("\nLogin gerente: ");
-        login_gerente = ler.nextLine();
-        ler = new Scanner(System.in);
-        System.out.println("Senha gerente: ");
-        senha_gerente = ler.nextLine();
-        ler = new Scanner(System.in);
+        //verificando se já existe logins semelhantes
+        if(login_gerente.equals("admin")) {
+            System.out.println("Login já existe. Cadastro não permitido.\n");
+            return false;
+        }
+        for(Gerente gerente : gerentes) {
+            if (gerente.getLogin().equals(login_gerente)) {
+                System.out.println("Login já existe. Cadastro não permitido.\n");
+                return false;
+            }
+        }
+        for(Gerente gerente : gerentes) {
+            for(Usuario usuario : gerente.getUsuarios()) {
+                if (usuario.getLogin().equals(login_gerente)) {
+                    System.out.println("Login já existe entre os usuários associados a um gerente. Cadastro não permitido.\n");
+                    return false;
+                }
+            }
+        }
 
         Gerente novoGerente = new Gerente(login_gerente, senha_gerente);
-        this.setGerente(novoGerente);
-
-        System.out.println("Cadastrado com sucesso.\n");
+        this.gerentes.add(novoGerente);
+        System.out.println(novoGerente.getLogin() + " cadastrado com sucesso.\n");
+        return true;
     }
 
-    public void excluiGerente(String loginGerente) {
+    public boolean excluiGerente(String loginGerente) {
         for (int i = 0; i < gerentes.size(); i++) {
             Gerente gerente = gerentes.get(i);
             if (gerente.getLogin().equals(loginGerente)) {
                 gerentes.remove(i);
                 System.out.println("Gerente removido com sucesso.\n");
-                return;
+                return true;
             }
         }
 
         System.out.println("Gerente não encontrado.\n");
+        return false;
     }
 }
