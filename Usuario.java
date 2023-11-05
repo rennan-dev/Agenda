@@ -32,8 +32,8 @@ public class Usuario {
         this.gerenteCriador = gerenteCriador;
     }
 
-    public Reserva solicitarReserva(String finalidade, Alocacao alocacao, Recurso recurso) {
-        Reserva reserva = new Reserva(finalidade, this, alocacao, recurso);
+    public Reserva solicitarReserva(String finalidade, Alocacao alocacao, Recurso recurso, boolean reservado) {
+        Reserva reserva = new Reserva(finalidade, this, alocacao, recurso, reservado);
         return reserva;
     }
     
@@ -122,5 +122,15 @@ public class Usuario {
             areaTexto.append(detalhesRecurso);
         }
     }
-    
+    public ArrayList<Reserva> getReservasSolicitadas(ArrayList<Reserva> reservasPendentes) {
+        ArrayList<Reserva> reservasSolicitadas = new ArrayList<>();
+        for (Reserva reserva : reservasPendentes) {
+            if (reserva.getUsuario().equals(this)) {
+                reservasSolicitadas.add(reserva);
+                System.out.println("Finalidade: " + reserva.getFinalidade() +
+                                   ", Alocação: " + reserva.getAlocacao().getHoraInicial());
+            }
+        }
+        return reservasSolicitadas;
+    }
 }

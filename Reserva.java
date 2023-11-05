@@ -1,15 +1,25 @@
 
 public class Reserva {
     private String finalidade;
+    private boolean reservado;
     private Usuario usuario;
     private Alocacao alocacao;
     private Recurso recurso;
     
-    public Reserva(String finalidade, Usuario usuario, Alocacao alocacao, Recurso recurso) {
+    public Reserva(String finalidade, Usuario usuario, Alocacao alocacao, Recurso recurso, boolean reservado) {
         this.finalidade = finalidade;
         this.usuario = usuario;
         this.alocacao = alocacao;
         this.recurso = recurso;
+        this.reservado = false;
+    }
+
+    public boolean getReservado() {
+        return reservado;
+    }
+
+    public void setReservado(boolean reservado) {
+        this.reservado = reservado;
     }
 
     public String getFinalidade() {
@@ -43,5 +53,4 @@ public class Reserva {
     public void setRecurso(Recurso recurso) {
         this.recurso = recurso;
     }
-    
 }

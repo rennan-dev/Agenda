@@ -27,7 +27,7 @@ public class TelaCadastraRecurso extends JFrame{
 
         // Define os rótulos dos botões
         JLabel labelRecurso = new JLabel("Nome do Recurso: ");
-        labelRecurso.setBounds(20, 80, 100, 20);
+        labelRecurso.setBounds(20, 80, 130, 20);
         JLabel labelTipo = new JLabel("Tipo do Recurso: ");
         labelTipo.setBounds(20, 120, 100, 20);
     
@@ -44,7 +44,7 @@ public class TelaCadastraRecurso extends JFrame{
         
         JButton botaoVoltar = new JButton("Voltar");
         botaoVoltar.setBounds(200, 180, 95, 30); // Define a posição e tamanho do botão
-        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12)); // Altere o valor de 12 para o tamanho desejado
+        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12)); 
 
         JLabel mensagemLabel = new JLabel("");
         mensagemLabel.setBounds(100, 220, 300, 20);
@@ -56,18 +56,31 @@ public class TelaCadastraRecurso extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String recurso = textRecurso.getText();
                 String tipo = textTipo.getText();
-
+        
+                // Verifica se os campos não estão vazios
+                if (recurso.isEmpty() || tipo.isEmpty()) {
+                    mensagemLabel.setText("Por favor, preencha todos os campos.");
+                    return; // Encerra o método para não continuar o cadastro
+                }
+        
+                // Verifica se os campos têm pelo menos 3 caracteres sem espaços
+                if (recurso.length() < 3 || tipo.length() < 3 || recurso.contains(" ") || tipo.contains(" ")) {
+                    mensagemLabel.setText("Os campos devem ter no mínimo 3 caracteres sem espaços.");
+                    return; // Encerra o método para não continuar o cadastro
+                }
+        
                 boolean cadastroSucesso = gerente.cadastraRecurso(recurso, tipo);
-
+        
                 if(cadastroSucesso) {
                     novaJanela.dispose();
-                    TelaGerente telaGerente = new TelaGerente(admin, gerente);
+                    TelaGerente telaGerente = new TelaGerente(admin,gerente);
                     telaGerente.telaMenuGerente();
-                }else {
+                } else {
                     mensagemLabel.setText("Recurso já existe no sistema.");
                 }
             }
         });
+        
 
         botaoVoltar.addActionListener(new ActionListener() {
             @Override

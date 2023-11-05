@@ -21,6 +21,10 @@ public class Recurso {
         this.interditado = interditado;
     }
 
+    public ArrayList<Reserva> getReservas() {
+        return reservas;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -92,8 +96,8 @@ public class Recurso {
 
     }
 
-    public void marcarReserva(String finalidade, Usuario usuario, Alocacao alocacao) {
-        Reserva novaReserva = new Reserva(finalidade, usuario, alocacao, this);
+    public void marcarReserva(String finalidade, Usuario usuario, Alocacao alocacao, boolean reservado) {
+        Reserva novaReserva = new Reserva(finalidade, usuario, alocacao, this, reservado);
         reservas.add(novaReserva);
     }
 
@@ -103,5 +107,17 @@ public class Recurso {
 
     public void notificarUsuario() {
 
+    }
+
+    public void listarReservas(String usuario, Usuario usuarioExistente, Gerente gerente) {
+
+        System.out.println("\nLista de Reservas do Recurso " + this.getNome());
+            for (Reserva reserva : reservas) {
+                if(gerente.getLogin().equals(usuario)) {
+                    System.out.println("Finalidade: " + reserva.getFinalidade() +
+                                    ", Alocação: " + reserva.getAlocacao().getHoraInicial());
+                }
+            }
+            
     }
 }

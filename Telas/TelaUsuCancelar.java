@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class TelaUsuSolicitarRecur extends JFrame{
+public class TelaUsuCancelar extends JFrame{
 
     private Administrador admin;
     private Gerente gerente;
@@ -11,13 +11,13 @@ public class TelaUsuSolicitarRecur extends JFrame{
     private JPanel contentPane;
 
 
-    public TelaUsuSolicitarRecur(Administrador admin, Gerente gerente, Usuario usuario) {
+    public TelaUsuCancelar(Administrador admin, Gerente gerente, Usuario usuario) {
         this.admin = admin;
         this.gerente = gerente;
         this.usuario = usuario;
     }
-
-    public void telaSolicitarRecursos() {
+    //cancelar reserva
+    public void telaCancelar() {
         contentPane = new JPanel();
         contentPane.setLayout(null);
         JFrame novaJanela = new JFrame();
@@ -25,7 +25,7 @@ public class TelaUsuSolicitarRecur extends JFrame{
         
 
         // Adicionando título
-        JLabel labelTitulo = new JLabel("Solicitar Reserva");
+        JLabel labelTitulo = new JLabel("Cancelar Reserva");
         labelTitulo.setBounds(50, 10, 300, 20);
         labelTitulo.setHorizontalAlignment(JLabel.CENTER);
         Font fonteTitulo = new Font("Arial", Font.BOLD, 20);
@@ -35,7 +35,7 @@ public class TelaUsuSolicitarRecur extends JFrame{
         
 
         JLabel labelLogin = new JLabel("Nome do Recurso: ");
-        labelLogin.setBounds(50, 80, 120, 20);
+        labelLogin.setBounds(50, 80, 150, 20);
         JTextField textSolicita = new JTextField();
         textSolicita.setBounds(160, 80, 140, 20);
         novaJanela.add(labelLogin);
@@ -63,9 +63,10 @@ public class TelaUsuSolicitarRecur extends JFrame{
 
         novaJanela.add(scrollPane); // Adiciona o JScrollPane à novaJanela
 
+
         // Adicionar botões com os títulos
         String[] titulos = {
-            "Solicitar Recurso",
+            "Cancelar Recurso",
             "Voltar",
         };
 
@@ -87,31 +88,14 @@ public class TelaUsuSolicitarRecur extends JFrame{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     switch (indice) {
+                        
                         case 0:
-                            // Lógica para solicitar recurso
-                            String solicitacao = textSolicita.getText();
-
-                            if (solicitacao.isEmpty()) {
-                                JOptionPane.showMessageDialog(null, "Por favor, insira o nome do recurso.");
-                            } else {
-                                boolean recursoEncontrado = false;
-                                
-                                // Percorra a lista de recursos para verificar se o recurso já está cadastrado
-                                for (Recurso recurso : gerente.getRecursos()) {
-                                    if (recurso.getNome().equalsIgnoreCase(solicitacao)) {
-                                        recursoEncontrado = true;
-                                        novaJanela.dispose();
-                                        TelaSolicitarRecurso telaSolicitarRecurso = new TelaSolicitarRecurso(admin, gerente, usuario,recurso);
-                                        telaSolicitarRecurso.telaSolicitarRecurso();
-                                        break; // Saia do loop, pois o recurso foi encontrado
-                                    }
-                                }
-
-                                if (!recursoEncontrado) {
-                                    JOptionPane.showMessageDialog(null, "Recurso não encontrado.");
-                                }
-                            }
+                            String nomeRecursoCancelar = textSolicita.getText();
+                            cancelarReserva(usuario, nomeRecursoCancelar);
+                            TelaUsuario telaUsuario2 = new TelaUsuario(admin, gerente, usuario);
+                            telaUsuario2.telaMenuUsuario();
                         break;
+
                         case 1:
                             novaJanela.dispose();
                             TelaUsuario telaUsuario = new TelaUsuario(admin, gerente, usuario);
@@ -133,4 +117,19 @@ public class TelaUsuSolicitarRecur extends JFrame{
         
         novaJanela.setVisible(true);
     }
+    
+    public void cancelarReserva(Usuario usuario, String nomeRecursoCancelar) {
+        for (Reserva reserva : gerente.getReservas()) {
+            if (reserva.getUsuario().equals(usuario) && reserva.getRecurso().getNome().equalsIgnoreCase(nomeRecursoCancelar)) {
+                reserva.setReservado(false);
+                gerente.getReservas().remove(reserva);
+                System.out.println("Reserva cancelada com sucesso.");
+                JOptionPane.showMessageDialog(null, "Reserva cancelada com sucesso.");
+                return; // Encerra o loop após encontrar e cancelar a reserva
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Não foi encontrada uma reserva para o usuário associada ao recurso especificado.");
+        System.out.println("Não foi encontrada uma reserva para o usuário associada ao recurso especificado.");
+    }
+    
 }

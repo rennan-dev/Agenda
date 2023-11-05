@@ -2,24 +2,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class TelaUsuario extends JFrame{
+public class TelaGerenHoraDisponivel extends JFrame{
 
     private Administrador admin;
     private Gerente gerente;
-    private Usuario usuario;
+    private JPanel contentPane;
 
-    public TelaUsuario(Administrador admin, Gerente gerente, Usuario usuario) {
+    public TelaGerenHoraDisponivel(Administrador admin, Gerente gerente) {
         this.admin = admin;
         this.gerente = gerente;
-        this.usuario = usuario;
     }
 
-    public void telaMenuUsuario() {
+    public void telaHoraDisponivel() {
+        contentPane = new JPanel();
+        contentPane.setLayout(null);
         JFrame novaJanela = new JFrame();
         novaJanela.setLayout(null);
+        
 
         // Adicionando título
-        JLabel labelTitulo = new JLabel("Menu Usuário");
+        JLabel labelTitulo = new JLabel("Hora disponível");
         labelTitulo.setBounds(50, 10, 300, 20);
         labelTitulo.setHorizontalAlignment(JLabel.CENTER);
         Font fonteTitulo = new Font("Arial", Font.BOLD, 20);
@@ -27,24 +29,30 @@ public class TelaUsuario extends JFrame{
 
         novaJanela.add(labelTitulo);
 
+        JTextArea areaTexto = new JTextArea();
+        areaTexto.setBounds(50, 100, 300, 250);
+        areaTexto.setEditable(false);
+
+        
+
         // Adicionar botões com os títulos
         String[] titulos = {
-            "Solicitar Reserva",
-            "Desmarcar Reserva",
-            "Visualizar Reservas",
+            "Voltar",
             "Sair da conta",
             "Sair da aplicação"
-        };
-
-        JTextArea areaTexto = new JTextArea();
-        areaTexto.setBounds(50, 330, 300, 150);
-        areaTexto.setEditable(false);
-        novaJanela.add(areaTexto);
-
+        };        
+        
+        int espacoEntreBotoes = 10; // Reduzi o espaço entre os botões
+        int xInicial = 50; // Ajustei o valor inicial de x
         for (int i = 0; i < titulos.length; i++) {
             JButton botao = new JButton(titulos[i]);
-            botao.setBounds(50, 50 + 50 * i, 300, 30);
-            novaJanela.add(botao);
+            int x = xInicial + (i * (100 + espacoEntreBotoes));  // Ajustei a fórmula para calcular x
+            int y = 400;  // Mantém a mesma coordenada y
+            botao.setBounds(x-10, y, 100, 30);  // Define as novas dimensões dos botões
+            
+            Font fonte = botao.getFont();
+            botao.setFont(new Font(fonte.getFontName(), Font.PLAIN, 10));
+            novaJanela.add(botao);    
 
             final int indice = i; // Variável final para ser acessada no ActionListener
 
@@ -53,30 +61,18 @@ public class TelaUsuario extends JFrame{
                 public void actionPerformed(ActionEvent e) {
                     switch (indice) {
                         case 0:
-                            //lógica para solicitar reserva
                             novaJanela.dispose();
-                            TelaUsuSolicitarRecur telaUsuSolicitarRecur = new TelaUsuSolicitarRecur(admin,gerente,usuario);
-                            telaUsuSolicitarRecur.telaSolicitarRecursos();
+                            TelaGerente telaGerente = new TelaGerente(admin, gerente);
+                            telaGerente.telaMenuGerente();
                         break;
                         case 1:
-                            //lógica para desmarcar reserva
-                            novaJanela.dispose();
-                            TelaUsuCancelar telaUsuCancelar = new TelaUsuCancelar(admin, gerente, usuario);
-                            telaUsuCancelar.telaCancelar();
-                        break;
-                        case 2:
-                            //lógica para visualizar reservas
-                            novaJanela.dispose();
-                            TelaUsuConsulta telaUsuConsulta = new TelaUsuConsulta(admin, gerente, usuario);
-                            telaUsuConsulta.telaConsulta();
-                        break;
-                        case 3:
+                            // Lógica para excluir gerente
                             novaJanela.dispose();
                             TelaLogin telaLogin = new TelaLogin(admin);
                             telaLogin.janelaLogin();
                         break;
-                        case 4:
-                            System.exit(0); // Sair da aplicação
+                        case 2:
+                            System.exit(0);
                         break;
                         default:
                         break;
@@ -89,6 +85,10 @@ public class TelaUsuario extends JFrame{
         novaJanela.setSize(400, 600);
         novaJanela.setLocationRelativeTo(null);
         novaJanela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        
         novaJanela.setVisible(true);
     }
+
 }

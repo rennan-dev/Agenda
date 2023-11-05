@@ -62,7 +62,6 @@ public class TelaAdmin extends JFrame{
                         case 2:
                             
                             ArrayList<Gerente> gerentes = admin.getGerentes();
-                            //novaJanela.add(areaTexto);
                             // Crie uma string formatada com a lista de gerentes
                             StringBuilder textoGerentes = new StringBuilder("Lista de Gerentes:\n");
                             for (Gerente gerente : gerentes) {

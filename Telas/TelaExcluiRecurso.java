@@ -40,7 +40,7 @@ public class TelaExcluiRecurso extends JFrame{
         
         JButton botaoVoltar = new JButton("Voltar");
         botaoVoltar.setBounds(200, 180, 95, 30); // Define a posição e tamanho do botão
-        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12)); // Altere o valor de 12 para o tamanho desejado
+        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12));
 
         JLabel mensagemLabel = new JLabel("");
         mensagemLabel.setBounds(100, 220, 300, 20);

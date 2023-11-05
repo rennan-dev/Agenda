@@ -44,18 +44,35 @@ public class TelaAdminCadastro extends JFrame{
         
         JButton botaoVoltar = new JButton("Voltar");
         botaoVoltar.setBounds(200, 180, 95, 30); // Define a posição e tamanho do botão
-        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12)); // Altere o valor de 12 para o tamanho desejado
+        botaoVoltar.setFont(new Font("Arial", Font.PLAIN, 12)); 
 
         JLabel mensagemLabel = new JLabel("");
         mensagemLabel.setBounds(100, 220, 300, 20);
         mensagemLabel.setForeground(Color.RED);
         novaJanela.add(mensagemLabel);
 
+        JLabel mensagemLabel2 = new JLabel("");
+        mensagemLabel2.setBounds(100, 240, 300, 20);
+        mensagemLabel2.setForeground(Color.RED);
+        novaJanela.add(mensagemLabel2);
+
+        JLabel mensagemLabel3 = new JLabel("");
+        mensagemLabel3.setBounds(100, 260, 300, 20);
+        mensagemLabel3.setForeground(Color.RED);
+        novaJanela.add(mensagemLabel3);
+
         botaoCriarGerente.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String login = textFieldLogin.getText();
                 String senha = new String(passwordFieldSenha.getPassword());
+
+                if (login.isEmpty() || senha.isEmpty() || login.length() < 3 || senha.length() < 3 || login.contains(" ") || senha.contains(" ")) {
+                    mensagemLabel.setText("Login e/ou senha inválidos.");
+                    mensagemLabel2.setText("\nNão podem ser brancos, conter espaços");
+                    mensagemLabel3.setText("ou ter menos de 3 digitos");
+                    return; // Sai do método se os dados forem inválidos
+                }
 
                 boolean cadastroSucesso = admin.cadastraGerente(login, senha);
 

@@ -1,15 +1,16 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Gerente extends Usuario {
 
     private ArrayList<Usuario> usuarios;
     private ArrayList<Recurso> recursos = new ArrayList<>();
+    private ArrayList<Reserva> reserva = new ArrayList<>();
 
     public Gerente(String login, String senha) {
         super(login, senha);
         this.usuarios = new ArrayList<>();
         this.recursos = new ArrayList<>();
+        this.reserva = new ArrayList<>();
     }
 
     public ArrayList<Usuario> getUsuarios() {
@@ -23,6 +24,12 @@ public class Gerente extends Usuario {
     }
     public void setRecursos(ArrayList<Recurso> recursos) {
         this.recursos = recursos;
+    }
+    public ArrayList<Reserva> getReservas() {
+        return reserva;
+    }
+    public void setReservas(ArrayList<Reserva> reservas) {
+        this.reserva = reservas;
     }
 
     public void listarUsuarios() {
@@ -139,100 +146,74 @@ public class Gerente extends Usuario {
         System.out.println("Recurso não encontrado.\n");
         return false;
     }
-
-    public int gerenciaRecurso(Scanner ler) {
-        int aux = 0;
-        do {
-            System.out.println("\nMenu gerencia recursos:");
-            System.out.println("Cadastrar recurso[1]");
-            System.out.println("Excluir recurso[2]");
-            System.out.println("Imprimir recursos[3]");
-            System.out.println("Voltar para o menu principal[4]");
-            System.out.print("Sair da aplicação[5]\nR: ");
     
-            String input = ler.nextLine();
-    
-            try {
-                aux = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Por favor, digite um número válido.");
-                continue;
-            }
-    
-            switch(aux) {
-                case 1:
-                    System.out.print("Digite o nome do recurso: ");
-                    String nomeRecurso = ler.nextLine();
-                    ler = new Scanner(System.in);
+    public boolean criarReserva(String finalidade, Usuario usuario, Alocacao alocacao, Recurso recurso) {
+        // Verificar se o recurso está disponível para reserva
+        if (recurso.isInterditado()) {
+            System.out.println("O recurso está interditado e não pode ser reservado.");
+            return false;
+        }
 
-                    System.out.print("Digite o tipo do recurso: ");
-                    String tipoRecurso = ler.nextLine();
-
-                    Recurso novoRecurso = new Recurso(nomeRecurso, tipoRecurso, false, this);
-                    System.out.println("Recurso cadastrado com sucesso.");
-                    gerenciaRecurso(ler);
-                break;
-    
-                case 2:
-                     System.out.println("Digite o nome do recurso para ser excluído: ");
-                     String nomeRecursoExcluir = ler.nextLine();
-                     ler = new Scanner(System.in);
-                     //Recurso recursoExcluir = new Recurso();
-                     //recursoExcluir.excluir(recursos, nomeRecursoExcluir);
-                break;
-                case 4: 
-                    return 4;
-    
-                default: 
-                    System.out.println("Digite uma opção válida.");
-                    break;
-            }
-        } while (true);
-    }
-    
-
-    /*public int gerenciaRecurso(Scanner ler) {
-        System.out.println("\nMenu gerencia recursos:");
-        System.out.println("Cadastrar recurso[1]");
-        System.out.println("Excluir recurso[2]");
-        System.out.println("Imprimir recursos[3]");
-        System.out.println("Voltar para o menu principal[4]");
-        System.out.println("Sair da aplicação[5]\nR: ");
-        
-        int aux=0;
-        while(true) {
-            String input = ler.nextLine();
-
-            try {
-                aux = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                System.out.println("Por favor, digite um número válido.");
-                continue;
-            }
-
-            switch(aux) {
-                case 1:
-                    System.out.print("Digite o nome do recurso: ");
-                    String nomeRecurso = ler.nextLine();
-                    ler = new Scanner(System.in);
-                    
-                    System.out.print("Digite o tipo do recurso: ");
-                    String tipoRecurso = ler.nextLine();
-                    ler = new Scanner(System.in);
-
-                    Recurso novoRecurso = new Recurso(nomeRecurso, tipoRecurso, false, this);
-                    System.out.println("Recurso cadastrado com sucesso.");
-                    gerenciaRecurso(ler);    
-                break;
-
-                case 4: 
-                return 4; //retorna para o menu principal
-
-                default: 
-                    System.out.println("Digite uma opção válida.");
-                    gerenciaRecurso(ler);
-                break;
+        // Verificar se o recurso já está reservado
+        for (Reserva reservaExistente : this.getReservas()) {
+            if (reservaExistente.getRecurso().equals(recurso) && reservaExistente.getReservado()) {
+                System.out.println("O recurso já está reservado.");
+                return false;
             }
         }
-    }*/
+
+        // Verificar se o usuário já possui uma reserva para o mesmo recurso
+        for (Reserva reservaExistente : usuario.getReservasSolicitadas(this.getReservas())) {
+            if (reservaExistente.getRecurso().equals(recurso)) {
+                System.out.println("O usuário já possui uma reserva para o mesmo recurso.");
+                return false;
+            }
+        }
+
+        // Criar uma nova reserva
+        Reserva novaReserva = new Reserva(finalidade, usuario, alocacao, recurso, true);
+        this.getReservas().add(novaReserva);
+
+        System.out.println("Reserva criada com sucesso.");
+        return true;
+    }
+
+
+    public void listarReservas() {
+        System.out.println("\nLista de Reservas criadas por " + this.getLogin() + ":");
+        for (Reserva r : reserva) {
+            if (r.getUsuario().getGerenteCriador().equals(this)) {
+                System.out.println("Finalidade: " + r.getFinalidade());
+                System.out.println("Data: " + r.getAlocacao().getData());
+                System.out.println("Hora Inicial: " + r.getAlocacao().getHoraInicial());
+                System.out.println("Hora Final: " + r.getAlocacao().getHoraFinal());
+                System.out.println("Recurso: " + r.getRecurso().getNome());
+                System.out.println("---------------------");
+            }
+        }
+    }
+    
+    //obter todos os usuarios com reserva: 
+    public ArrayList<Reserva> obterReservasUsuarios() {
+        ArrayList<Reserva> reservasUsuarios = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            reservasUsuarios.addAll(usuario.getReservasSolicitadas(reserva));
+        }
+        return reservasUsuarios;
+    }
+    
+    public boolean interditarRecurso(String usuarioReserva, String recursoReserva) {
+        for (Usuario usuario : this.getUsuarios()) {
+            if (usuario.getLogin().equals(usuarioReserva)) {
+                for (Reserva reserva : usuario.getReservasSolicitadas(this.getReservas())) {
+                    if (reserva.getRecurso().getNome().equals(recursoReserva)) {
+                        reserva.getRecurso().interditar();
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
 }

@@ -9,6 +9,7 @@ public class TelaGerente extends JFrame{
     private Gerente gerente;
     private JPanel contentPane;
 
+
     public TelaGerente(Administrador admin, Gerente gerente) {
         this.admin = admin;
         this.gerente = gerente;
@@ -40,11 +41,11 @@ public class TelaGerente extends JFrame{
             "Interditar",
             "Desinterditar",
             "Consultar",
-            "Alterar Gerente",
+            "Notificar usuários",
             "Verificar horário disponível",
             "Marcar reserva",
             "Desmarcar reserva",
-            "Notificar usuários",
+            "Sair da conta",
             "Sair da aplicação"
         };
 
@@ -107,19 +108,16 @@ public class TelaGerente extends JFrame{
                             telaCadastraRecurso.telaCadastraRecurso();
                         break;
                         case 4:
-                            //lógica excluir recurso
                             novaJanela.dispose();
                             TelaExcluiRecurso telaExcluiRecurso = new TelaExcluiRecurso(admin,gerente);
                             telaExcluiRecurso.telaExcluiRecurso();
                         break;
                         case 5:
-                            //interditar
                             novaJanela.dispose();
                             TelaGerenInter telaGerenInter = new TelaGerenInter(admin, gerente);
                             telaGerenInter.telaInterditaRecursos();
                         break;
                         case 6:
-                            //interditar
                             novaJanela.dispose();
                             TelaGerenDesin telaGerenDesin = new TelaGerenDesin(admin, gerente);
                             telaGerenDesin.telaDesinterditaRecursos();
@@ -129,7 +127,22 @@ public class TelaGerente extends JFrame{
                             TelaGerenConsulta telaGerenConsulta = new TelaGerenConsulta(admin, gerente);
                             telaGerenConsulta.telaConsultaRecursos();
                         break;
-                        case 8:
+                        case 9:
+                            novaJanela.dispose();
+                            TelaGerenHoraDisponivel telaGerenHoraDisponivel = new TelaGerenHoraDisponivel(admin, gerente);
+                            telaGerenHoraDisponivel.telaHoraDisponivel();
+                        break;
+                        case 10:
+                            novaJanela.dispose();
+                            TelaGerenMarcarReserva telaGerenMarcarReserva = new TelaGerenMarcarReserva(admin, gerente, admin, gerente.getReservas());
+                            telaGerenMarcarReserva.telaGerenMarcarReserva();
+                        break;
+                        case 11:
+                            novaJanela.dispose();
+                            TelaGerenApagaReser telaGerenApagaReser = new TelaGerenApagaReser(admin, gerente, admin, gerente.getReservas());
+                            telaGerenApagaReser.telaGerenApagaReser();
+                        break;
+                        case 12:
                             novaJanela.dispose();
                             TelaLogin telaLogin = new TelaLogin(admin);
                             telaLogin.janelaLogin();

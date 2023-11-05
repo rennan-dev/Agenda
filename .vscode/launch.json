@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AppAgendaRecurso",
+            "request": "launch",
+            "mainClass": "AppAgendaRecurso",
+            "projectName": "Agenda_de_Recurso3_73b1bea"
+        },
+        {
+            "type": "java",
+            "name": "AppAgendaRecurso",
+            "request": "launch",
+            "mainClass": "AppAgendaRecurso",
+            "projectName": "Agenda_de_Recurso2_73b1be9"
+        },
+        {
+            "type": "java",
+            "name": "AppAgendaRecurso",
+            "request": "launch",
+            "mainClass": "AppAgendaRecurso",
+            "projectName": "Agenda_de_Recurso_ada71169"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

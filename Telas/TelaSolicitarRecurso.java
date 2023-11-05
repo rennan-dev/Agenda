@@ -1,17 +1,22 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class TelaSolicitarRecurso extends JFrame {
 
     private Administrador admin;
     private Gerente gerente;
     private Usuario usuario;
+    private ArrayList<Reserva> reservasPendentes;
+    private Recurso recurso;
 
-    public TelaSolicitarRecurso(Administrador admin, Gerente gerente, Usuario usuario) {
+    public TelaSolicitarRecurso(Administrador admin, Gerente gerente, Usuario usuario, Recurso recurso) {
         this.admin = admin;
         this.gerente = gerente;
         this.usuario = usuario;
+        this.recurso = recurso;
+        this.reservasPendentes = reservasPendentes;
     }
 
     public void telaSolicitarRecurso() {
@@ -70,6 +75,31 @@ public class TelaSolicitarRecurso extends JFrame {
             }
         });
 
+        // Adicionando campo para seleção de hora inicial
+        JLabel labelHoraInicial = new JLabel("Hora Inicial:");
+        labelHoraInicial.setBounds(50, 110, 100, 20);
+        novaJanela.add(labelHoraInicial);
+
+        String[] horas = new String[24];
+        for (int i = 0; i < 24; i++) {
+            horas[i] = String.format("%02d", i); // Formata para ter sempre dois dígitos (ex: 01, 02, ..., 10, 11, ..., 23)
+        }
+
+        JComboBox<String> comboBoxHoraInicial = new JComboBox<>(horas);
+        comboBoxHoraInicial.setBounds(120, 110, 60, 20);
+        novaJanela.add(comboBoxHoraInicial);
+
+        // Adicionando campo para seleção de hora final
+        JLabel labelHoraFinal = new JLabel("Hora Final:");
+        labelHoraFinal.setBounds(200, 110, 100, 20);
+        novaJanela.add(labelHoraFinal);
+
+        JComboBox<String> comboBoxHoraFinal = new JComboBox<>(horas);
+        comboBoxHoraFinal.setBounds(270, 110, 60, 20);
+        novaJanela.add(comboBoxHoraFinal);
+
+
+
         // Adicionar botões com os títulos
         String[] titulos = {
                 "Solicitar",
@@ -89,8 +119,29 @@ public class TelaSolicitarRecurso extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     switch (indice) {
                         case 0:
-                            // Lógica para lidar com o botão "Solicitar"
-                            break;
+                            String finalidade = campoFinalidade.getText();
+                            String data = comboBoxDia.getSelectedItem() + "/" + (comboBoxMes.getSelectedIndex() + 1) + "/" + comboBoxAno.getSelectedItem();
+                            String horaInicial = (String) comboBoxHoraInicial.getSelectedItem();
+                            String horaFinal = (String) comboBoxHoraFinal.getSelectedItem();
+
+                            if (finalidade.isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "O campo Finalidade não pode estar em branco.");
+                            } else if (horaFinal.compareTo(horaInicial) <= 0) {
+                                JOptionPane.showMessageDialog(null, "A hora final deve ser maior que a hora inicial.");
+                            } else {
+                                Alocacao alocacao = new Alocacao(data, horaInicial, horaFinal);
+                                boolean reservaCriada = gerente.criarReserva(finalidade, usuario, alocacao, recurso);
+                            
+                                if (reservaCriada) {
+                                    System.out.println("Reserva criada com sucesso.");
+                                    novaJanela.dispose();
+                                    TelaUsuario telaUsuario = new TelaUsuario(admin, gerente, usuario);
+                                    telaUsuario.telaMenuUsuario();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Recurso interditado.");
+                                }
+                            }
+                        break;
                         case 1:
                             novaJanela.dispose();
                             TelaUsuario telaUsuario = new TelaUsuario(admin, gerente, usuario);
